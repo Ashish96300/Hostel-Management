@@ -1,0 +1,40 @@
+**************Login As Admin-******************************
+
+username - admin
+password - 12345
+
+(right now there is only one admin)
+
+***************************************************************
+
+## ✨ Features
+
+### 👨‍🎓 Student Features
+- Register/Login with JWT authentication
+- View assigned room details
+- Submit complaints (electricity, water, etc.)
+- Apply for leave requests
+- Track complaint & leave status
+
+### 🧑‍💼 Admin Features
+- Dashboard with live stats
+- Room management (create/update/assign students)
+- Complaint management (resolve/reject/in-progress)
+- Leave approval/rejection system
+- View all students and rooms
+
+## 🛠 Tech Stack
+
+Frontend:
+- React.js
+- Tailwind CSS
+- Axios
+
+Backend:
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+
+Other:
+- Cloudinary (image upload)
