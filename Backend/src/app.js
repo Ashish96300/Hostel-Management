@@ -8,16 +8,23 @@ const app = express();
 
 
 app.use(cors({
-    origin: [
-        process.env.CORS_ORIGIN,
-        "http://localhost:5173",  
-        "http://localhost:3000",  
-    ].filter(Boolean),
+    origin: function(origin, callback) {
+        const allowedOrigins = [
+            process.env.CORS_ORIGIN,
+            "http://localhost:5173",
+            "http://localhost:3000",
+        ];
+        
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
 console.log("backend cors ",process.env.CORS_ORIGIN)
 
 app.use(express.json({ limit: "16kb" }));
