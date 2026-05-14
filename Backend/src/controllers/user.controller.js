@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { Room } from "../models/room.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 
 
 const generateAccessAndRefereshTokens = async (userId) => {
