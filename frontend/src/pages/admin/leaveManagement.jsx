@@ -36,7 +36,7 @@ const LeaveCard = ({ leave, onUpdateStatus }) => {
                     {leave.student && (
                         <p className="text-xs text-slate-400 font-semibold mt-1">
                             👤 {leave.student.fullName}
-                            {leave.student.room && ` • Room ${leave.student.room}`}
+                            {leave.student.room.roomNumber && ` • Room ${leave.student.room.roomNumber}`}
                         </p>
                     )}
 

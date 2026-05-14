@@ -56,7 +56,7 @@ const getAllLeaveRequests = asyncHandler(async (req, res) => {
     if (status) filter.status = status.toUpperCase();
 
     const leaves = await Leave.find(filter)
-        .populate("student", "fullName email room branch enrollmentNumber")
+        .populate("student", "fullName email room branch enrollmentNumber roomNumber")
         .sort({ createdAt: -1 });
 
     return res.status(200).json(

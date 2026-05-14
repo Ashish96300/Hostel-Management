@@ -43,7 +43,7 @@ const ComplaintCard = ({ complaint, onUpdateStatus }) => (
                 {complaint.student && (
                     <p className="text-xs text-slate-400 font-semibold mt-2">
                         👤 {complaint.student.fullName}
-                        {complaint.student.room && ` • Room ${complaint.student.room}`}
+                        {complaint.student.room.rommNumber && ` • Room ${complaint.student.room.roomNumber}`}
                     </p>
                 )}
 

@@ -72,7 +72,7 @@ const getAllComplaints = asyncHandler(async (req, res) => {
     if (status) filter.status = status.toUpperCase();
 
     const complaints = await Complaint.find(filter)
-        .populate("student", "fullName room phoneNumber")
+        .populate("student", "fullName room phoneNumber roomNumber")
         .sort({ createdAt: -1 });
 
     return res.status(200).json(
