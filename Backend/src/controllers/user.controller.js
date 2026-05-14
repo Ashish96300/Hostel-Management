@@ -40,7 +40,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefereshTokens(user._id);
 
-        const options = { httpOnly: true, secure: true };
+        const options = { httpOnly: true, secure: true ,sameSite: "none" };
 
         return res
             .status(200)
@@ -157,7 +157,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true // Ensure this is true in production (HTTPS)
+        secure: true ,// Ensure this is true in production (HTTPS)
+        sameSite: "none"
     };
 
     return res
@@ -186,7 +187,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     // 2. Clear cookies
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        sameSite: "none"
     };
 
     return res
