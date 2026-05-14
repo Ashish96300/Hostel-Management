@@ -21,7 +21,13 @@ const Login = () => {
                 password: credentials.password
             });
             setAuth(response.data.data.user);
-            navigate("/dashboard");
+            const user = response.data.data.user;
+            
+            if (user.role === "ADMIN") {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/dashboard");
+            }
         } catch (err) {
             setError(err.response?.data?.message || "Invalid credentials");
         } finally {

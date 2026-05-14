@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import api from "./api/axios";
@@ -15,7 +14,7 @@ import AdminComplaints from "./pages/admin/complaintManagement";
 import LeaveManagement from "./pages/admin/leaveManagement";
 
 function App() {
-  const { isAuthenticated, setAuth, isLoading ,user} = useAuthStore();
+  const { isAuthenticated, setAuth, isLoading, user } = useAuthStore();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -39,95 +38,85 @@ function App() {
     );
   }
 
+  // Helper: where to send authenticated users by default
+  const defaultHome = user?.role === "ADMIN" ? "/admin/dashboard" : "/dashboard";
+
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route 
-          path="/login" 
-          element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} 
+        <Route
+          path="/login"
+          element={!isAuthenticated ? <Login /> : <Navigate to={defaultHome} />}
         />
-        <Route 
-          path="/register" 
-          element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} 
-        /> 
-
-        {/* Dashboard Modules wrapped in Layout */}
-        <Route 
-          path="/dashboard" 
-          element={
-            isAuthenticated ? (
-              <Layout title="System Overview">
-                <Overview />
-              </Layout>
-            ) : <Navigate to="/login" />
-          } 
-        /> 
-
-              <Route 
-        path="/dashboard/complaints" 
-        element={
-          isAuthenticated ? (
-            <Layout title="Facility Complaints">
-              <Complaints />
-            </Layout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route path="/dashboard/leaves" element={
-    isAuthenticated ? (
-        <Layout title="Leave Management"><Leaves /></Layout>
-    ) : <Navigate to="/login" />
-    } />
-
-    {/* Admin Dashboard */}
-    <Route 
-      path="/admin/dashboard" 
-      element={
-        isAuthenticated && user?.role === "ADMIN" ? (
-          <Layout title="Admin Command Center">
-            <AdminDashboard />
-          </Layout>
-        ) : <Navigate to="/dashboard" />
-      } 
-/>
-
-       <Route 
-          path="/admin/rooms" 
-          element={
-            isAuthenticated && user?.role === "ADMIN" ? (
-              <Layout title="Room Inventory">
-                <RoomManagement />
-              </Layout>
-            ) : <Navigate to="/dashboard" />
-          } 
+        <Route
+          path="/register"
+          element={!isAuthenticated ? <Register /> : <Navigate to={defaultHome} />}
         />
 
-            <Route
-      path="/admin/complaints"
-      element={
-        isAuthenticated && user?.role === "ADMIN" ? (
-          <Layout title="Complaint Management">
-            <AdminComplaints />
-          </Layout>
-        ) : <Navigate to="/dashboard" />
-      }
-    />
-        <Route 
-      path="/admin/leaves" 
-      element={
-        isAuthenticated && user?.role === "ADMIN" ? (
-          <Layout title="Leave Management">
-            <LeaveManagement />
-          </Layout>
-        ) : <Navigate to="/dashboard" />
-      } 
-    />
-            {/* Root Redirect */}
-        <Route path="/" element={<Navigate to="/login" />} />
-        
-        {/* 404 Redirect */}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        {/* Student Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role === "ADMIN" ? <Navigate to="/admin/dashboard" /> :  // ✅ kick admin out
+            <Layout title="System Overview"><Overview /></Layout>
+          }
+        />
+        <Route
+          path="/dashboard/complaints"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role === "ADMIN" ? <Navigate to="/admin/dashboard" /> :
+            <Layout title="Facility Complaints"><Complaints /></Layout>
+          }
+        />
+        <Route
+          path="/dashboard/leaves"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role === "ADMIN" ? <Navigate to="/admin/dashboard" /> :
+            <Layout title="Leave Management"><Leaves /></Layout>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role !== "ADMIN" ? <Navigate to="/dashboard" /> :  // ✅ kick student out
+            <Layout title="Admin Command Center"><AdminDashboard /></Layout>
+          }
+        />
+        <Route
+          path="/admin/rooms"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role !== "ADMIN" ? <Navigate to="/dashboard" /> :
+            <Layout title="Room Inventory"><RoomManagement /></Layout>
+          }
+        />
+        <Route
+          path="/admin/complaints"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role !== "ADMIN" ? <Navigate to="/dashboard" /> :
+            <Layout title="Complaint Management"><AdminComplaints /></Layout>
+          }
+        />
+        <Route
+          path="/admin/leaves"
+          element={
+            !isAuthenticated ? <Navigate to="/login" /> :
+            user?.role !== "ADMIN" ? <Navigate to="/dashboard" /> :
+            <Layout title="Leave Management"><LeaveManagement /></Layout>
+          }
+        />
+
+        {/* Root & 404 */}
+        <Route path="/" element={<Navigate to={isAuthenticated ? defaultHome : "/login"} />} />
+        <Route path="*" element={<Navigate to={isAuthenticated ? defaultHome : "/login"} />} />
       </Routes>
     </Router>
   );
