@@ -113,7 +113,10 @@ const registerUser = asyncHandler(async (req, res ,next) => {
         });
     }
 
-    const createdUser = await User.findById(user._id).select("-password -refreshToken");
+    // const createdUser = await User.findById(user._id).select("-password -refreshToken");
+    const createdUser = await User.findById(user._id)
+    .select("-password -refreshToken")
+    .populate("room", "roomNumber");
 
     if (!createdUser) {
         throw new ApiError(500, "Something went wrong while registering the user");
@@ -149,11 +152,12 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid user credentials");
     }
 
-    // 4. Generate Tokens
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id);
 
-    // 5. Send Cookies and Response
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+    // const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+    const loggedInUser = await User.findById(user._id)
+    .select("-password -refreshToken")
+    .populate("room", "roomNumber");
 
     const options = {
         httpOnly: true,
